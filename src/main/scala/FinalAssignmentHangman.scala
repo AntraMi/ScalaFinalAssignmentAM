@@ -2,14 +2,15 @@ import scala.io.StdIn.readLine
 
 object FinalAssignmentHangman extends App  {
   /**
-   * This is an Assignment for Mara and Antra
+   * This is an Assignment for Scala Class
+   * Created by Mara and Antra
    */
 
   val word = "car".toUpperCase()
   val lengthOfWord = word.length
 
   /**
-   * Setting only letters to aloud
+   * Setting only letters to be accepted
    *
    */
   // Set of upper case letters.
@@ -25,7 +26,7 @@ object FinalAssignmentHangman extends App  {
 
   /**
    * Game loop
-   * @param word to be played
+   * @param word - word to be played
    */
 
   def play(word: String): Unit = {
@@ -64,10 +65,10 @@ object FinalAssignmentHangman extends App  {
           println(s"Correctly guessed letters $guessedCorrect") // letters are in the order of guess order, not like they are in the secret word
           var ff = guessedCorrect.size
           if (ff == word.length) {
-            println(s"You have guessed all the letter in the word!")
+            println(s"You have guessed all the letters in the word!")
             val guess2 = readLine("Please guess the word").toUpperCase()
             if (guess2 == word) {
-              println(s"You guess the word $guess, Congratulations!")
+              println(s"You have guessed the word $guess, Congratulations!")
               guessed = true
             }
             else if (guess2 != word) {
@@ -81,26 +82,26 @@ object FinalAssignmentHangman extends App  {
       }
       else if (guess.length == word.length ) {
         if (guess == word) {
-          println(s"You guess the word $guess, congratulations")
+          println(s"You have guessed the word $guess. Congratulations!")
           guessed = true
         }
         else if (guess != word ) {
           println(s"$guess is not the secret word")
           tries -= 1
           guessedWords += guess
-          println(s"You have left only $tries guesses")
+          println(s"You have only $tries guesses left")
         }
         else  {
           println("not a valid guess")
           tries -= 1
-          println(s"You have left only $tries guesses")
+          println(s"You have only $tries guesses left")
           guessedWords += guess
         }
       }
       else {
         println("not a valid guess")
         tries -= 1
-        println(s"You have left only $tries guesses")
+        println(s"You have only $tries guesses left")
         guessedWords += guess
 
       }
@@ -109,7 +110,7 @@ object FinalAssignmentHangman extends App  {
 
   play(word)
 
-  val afterGame = readLine("Do you want new game").toUpperCase()
+  val afterGame = readLine("Do you want new game?").toUpperCase()
 
 
 }
