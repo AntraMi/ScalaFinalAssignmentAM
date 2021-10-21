@@ -20,7 +20,10 @@ object FinalAssignmentHangman extends App  {
 
   val alphaSet: Set[Char] = alphaSett
 
-  // Draw nice picture
+  /**
+   * Drawing hangMan picture
+   * @param tries - in cases of loss, drawing is drawing up
+   */
 
   def pictureFun (tries:Int): Unit = {
     tries match {
