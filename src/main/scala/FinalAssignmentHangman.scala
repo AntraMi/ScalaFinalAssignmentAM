@@ -13,7 +13,7 @@ object FinalAssignmentHangman extends App  {
    * Setting only letters to be accepted
    *
    */
-  // Set of upper case letters.
+
   def alphaSett: Set[Char] = {
     ('A' to 'Z').toSet
   }
@@ -45,12 +45,12 @@ object FinalAssignmentHangman extends App  {
     while (tries > 0 && !guessed && !exit) {
       val guess = readLine("Please guess a letter or a word").toUpperCase()
       if (guess.length == 1 && alphaSet.contains(guess.head)) {
-        if (guessedLetters.contains(guess)) println(s"You already guess this letter, $guess")
+        if (guessedLetters.contains(guess)) println(s"You already guessed this letter, $guess")
         else if (!word.contains(guess.head)) {
           println(s"$guess is not in the word.")
           tries -= 1
           guessedLetters += guess
-          println(s"You have left only $tries guesses")
+          println(s"You have only $tries guesses left")
         }
         else {
           println(s"Good job, $guess is in the word")
@@ -68,7 +68,7 @@ object FinalAssignmentHangman extends App  {
             println(s"You have guessed all the letters in the word!")
             val guess2 = readLine("Please guess the word").toUpperCase()
             if (guess2 == word) {
-              println(s"You have guessed the word $guess, Congratulations!")
+              println(s"You have guessed the word $guess. Congratulations!")
               guessed = true
             }
             else if (guess2 != word) {
