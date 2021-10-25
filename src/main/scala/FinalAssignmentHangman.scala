@@ -1,12 +1,57 @@
+import scala.io.Source
 import scala.io.StdIn.readLine
 
-object FinalAssignmentHangman extends App  {
+object FinalAssignmentHangman extends App {
   /**
    * This is an Assignment for Scala Class
    * Created by Mara and Antra
    */
+  val srcPath = "./src/resources/dictionaryWords.txt"
 
-  val word = "car".toUpperCase()
+  /**
+   * Gets info from a text file
+   *
+   * @param srcPath - file name
+   * @return lines or words to use for the game
+   */
+  def getLinesFromFile(srcPath: String): List[String] = {
+    val bufferedSource = Source.fromFile(srcPath)
+    val lines = bufferedSource.getLines.toList
+    bufferedSource.close
+    lines
+  }
+
+  var words = getLinesFromFile(srcPath)
+
+  /**
+   * Gets random words from file
+   *
+   * @param lines - word to be used in the game
+   *
+   */
+  def randomWord(lines: List[String]): String = {
+    lines(scala.util.Random.nextInt(lines.length))
+  }
+
+  val randomWordForGuessing = randomWord(words)
+
+  /**
+   * Splits word into characters
+   */
+  // Split the word into individual letters.
+  def wordSplit(word: String): List[Char] = {
+    word.toList
+  }
+
+  /**
+   * Joins words with a space between
+   *
+   */
+  def wordJoin(wordlist: List[Char]): String = {
+    wordlist.mkString(" ")
+  }
+
+  val word = randomWordForGuessing.toUpperCase()
   val lengthOfWord = word.length
 
   /**
@@ -22,26 +67,40 @@ object FinalAssignmentHangman extends App  {
 
   /**
    * Drawing hangMan picture
-   * @param tries - in cases of loss, drawing is drawing up
+   *
+   * @param tries - in cases of loss, drawing piece by piece is coming up
    */
 
-  def pictureFun (tries:Int): Unit = {
+  def pictureFun(tries: Int): Unit = {
     tries match {
-      case 0 => println("__\n|  |\n|  O\n| /|\\\n| / \\\n|")
-      case 1 => println("__\n|  |\n|  O\n| /|\\\n| /")
-      case 2 => println("__\n|  |\n|  O\n| /|\\\n| ")
-      case 3 => println("__\n|  |\n|  O\n| /| ")
-      case 4 => println("__\n|  |\n|  O\n| / ")
-      case 5 => println("__\n|  |\n|  O\n|  ")
+      case 0 => println("______\n|    |\n|    O\n|   /|\\\n|   / \\\n|")
+      case 1 => println("______\n|    |\n|    O\n|   /|\\\n|   /\n|")
+      case 2 => println("______\n|    |\n|    O\n|   /|\\\n|\n| ")
+      case 3 => println("______\n|    |\n|    O\n|   /|\n|\n|")
+      case 4 => println("______\n|    |\n|    O\n|   / \n|\n|")
+      case 5 => println("______\n|    |\n|    O\n|   \n|\n|")
     }
   }
-
-
-  //val playerName = readLine("Player what is your name?")
-  //println(s"The secret word has $lengthOfWord letters")
-
   /**
-   * Game loop
+   * Main game loop
+   */
+
+
+  def mainGameLoop(): Unit = {
+    var is_game_needed = true
+    while (is_game_needed) {
+      println("Game Hangman!")
+      val response = readLine(s" Do you want to play Y/N ?")
+      if (response.toLowerCase.startsWith("y")) {
+        play(word)
+      }
+      else is_game_needed = false
+      println(s" It is end of game, the secret word was $word ")
+    }
+  }
+  /**
+   * Running up play
+   *
    * @param word - word to be played
    */
 
@@ -55,19 +114,19 @@ object FinalAssignmentHangman extends App  {
     val guessedWords = scala.collection.mutable.ListBuffer.empty[String]
     val guessedCorrect = scala.collection.mutable.ListBuffer.empty[String]
     var tries = 6
-    println("Let's play Hangman!")
+    println(s" Let's play Hangman!")
     println(s"The secret word has $lengthOfWord letters $wordShow")
 
     while (tries > 0 && !guessed && !exit) {
       val guess = readLine("Please guess a letter or a word").toUpperCase()
       if (guess.length == 1 && alphaSet.contains(guess.head)) {
-        if (guessedLetters.contains(guess)) println(s"You already guess this letter, $guess")
+        if (guessedLetters.contains(guess)) println(s"You have already tried this letter, $guess")
         else if (!word.contains(guess.head)) {
           println(s"$guess is not in the word.")
           tries -= 1
           pictureFun(tries)
           guessedLetters += guess
-          println(s"You have left only $tries guesses")
+          println(s"You have only $tries guesses left")
         }
         else {
           println(s"Good job, $guess is in the word")
@@ -80,37 +139,32 @@ object FinalAssignmentHangman extends App  {
           val mee = word.indexOf(result) + 1
           println(s" $result letter is number $mee in the word")
           println(s"Correctly guessed letters $guessedCorrect") // letters are in the order of guess order, not like they are in the secret word
-          var ff = guessedCorrect.size
+
+          for (c <- word) {
+            if (c == guess.head) println(s"$guess")
+            else println("_")
+          }
+
+          val ff = guessedCorrect.size
           if (ff == word.length) {
-            println(s"You have guessed all the letter in the word!")
-            val guess2 = readLine("Please guess the word").toUpperCase()
-            if (guess2 == word) {
-              println(s"You guess the word $guess, Congratulations!")
-              guessed = true
-            }
-            else if (guess2 != word) {
-              println(s" $guess2 is not the word")
-              tries -= 6
-              guessedWords += guess
-              println(s"You lost")
-              println("__\n|  |\n|  O\n| /|\\\n| / \\\n|")
-            }
+            println(s"You have guessed all the letters in the secret word $word,Congratulations!")
+            guessed = true
           }
         }
       }
-      else if (guess.length == word.length ) {
+      else if (guess.length == word.length) {
         if (guess == word) {
-          println(s"You guess the word $guess, congratulations")
+          println(s"You have guessed the word $guess, congratulations")
           guessed = true
         }
-        else if (guess != word ) {
+        else if (guess != word) {
           println(s"$guess is not the secret word")
           tries -= 1
           pictureFun(tries)
           guessedWords += guess
           println(s"You have left only $tries guesses")
         }
-        else  {
+        else {
           println("not a valid guess")
           tries -= 1
 
@@ -128,22 +182,9 @@ object FinalAssignmentHangman extends App  {
 
       }
     }
-  }
 
-
-  def mainGameLoop(): Unit = {
-    var is_game_needed = true
-    while (is_game_needed) {
-      val response = readLine("New game Y/N ?")
-      if (response.toLowerCase.startsWith("y")) {
-        play(word)
-      }
-      else is_game_needed = false
-      println("Bye bye ")//in this case we end the game on anything other text starting with y or Y
-    }
 
   }
-
   mainGameLoop()
 
 }
