@@ -76,12 +76,12 @@ object FinalAssignmentHangman extends App {
 
   def pictureFun(tries: Int): Unit = {
     tries match {
-      case 0 => println("__\n|    |\n|    O\n|   /|\\\n|   / \\\n|")
-      case 1 => println("__\n|    |\n|    O\n|   /|\\\n|   /\n|")
-      case 2 => println("__\n|    |\n|    O\n|   /|\\\n|\n| ")
-      case 3 => println("__\n|    |\n|    O\n|   /|\n|\n|")
-      case 4 => println("__\n|    |\n|    O\n|   / \n|\n|")
-      case 5 => println("__\n|    |\n|    O\n|   \n|\n|")
+      case 0 => println("_____\n|    |\n|    O\n|   /|\\\n|   / \\\n|")
+      case 1 => println("_____\n|    |\n|    O\n|   /|\\\n|   /\n|")
+      case 2 => println("_____\n|    |\n|    O\n|   /|\\\n|\n| ")
+      case 3 => println("_____\n|    |\n|    O\n|   /|\n|\n|")
+      case 4 => println("_____\n|    |\n|    O\n|   / \n|\n|")
+      case 5 => println("_____y\n|    |\n|    O\n|   \n|\n|")
     }
   }
   /**
