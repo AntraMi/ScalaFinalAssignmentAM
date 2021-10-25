@@ -22,7 +22,7 @@ object FinalAssignmentHangman extends App {
   }
 
   var words = getLinesFromFile(srcPath)
-
+  val firstLine = words.head
   /**
    * Gets random words from file
    *
@@ -38,7 +38,7 @@ object FinalAssignmentHangman extends App {
   /**
    * Splits word into characters
    */
-  // Split the word into individual letters.
+
   def wordSplit(word: String): List[Char] = {
     word.toList
   }
@@ -53,9 +53,12 @@ object FinalAssignmentHangman extends App {
 
   val word = randomWordForGuessing.toUpperCase()
   val lengthOfWord = word.length
+  //  println(word) //THE SECRET WORD
+  val charCountWord = word.toList.distinct.size // count unique char in the secret word
+  //  println(charCountWord)
 
   /**
-   * Setting only letters to be accepted
+   * Set only letters to be accepted
    *
    */
 
@@ -63,8 +66,8 @@ object FinalAssignmentHangman extends App {
     ('A' to 'Z').toSet
   }
 
+  val myLoop = wordSplit(word)
   val alphaSet: Set[Char] = alphaSett
-
   /**
    * Drawing hangMan picture
    *
@@ -73,12 +76,12 @@ object FinalAssignmentHangman extends App {
 
   def pictureFun(tries: Int): Unit = {
     tries match {
-      case 0 => println("______\n|    |\n|    O\n|   /|\\\n|   / \\\n|")
-      case 1 => println("______\n|    |\n|    O\n|   /|\\\n|   /\n|")
-      case 2 => println("______\n|    |\n|    O\n|   /|\\\n|\n| ")
-      case 3 => println("______\n|    |\n|    O\n|   /|\n|\n|")
-      case 4 => println("______\n|    |\n|    O\n|   / \n|\n|")
-      case 5 => println("______\n|    |\n|    O\n|   \n|\n|")
+      case 0 => println("__\n|    |\n|    O\n|   /|\\\n|   / \\\n|")
+      case 1 => println("__\n|    |\n|    O\n|   /|\\\n|   /\n|")
+      case 2 => println("__\n|    |\n|    O\n|   /|\\\n|\n| ")
+      case 3 => println("__\n|    |\n|    O\n|   /|\n|\n|")
+      case 4 => println("__\n|    |\n|    O\n|   / \n|\n|")
+      case 5 => println("__\n|    |\n|    O\n|   \n|\n|")
     }
   }
   /**
@@ -89,13 +92,13 @@ object FinalAssignmentHangman extends App {
   def mainGameLoop(): Unit = {
     var is_game_needed = true
     while (is_game_needed) {
-      println("Game Hangman!")
-      val response = readLine(s" Do you want to play Y/N ?")
+      println("Welcome to the Game HangMan!")
+      val response = readLine(" Do you want to play Y/N ?")
       if (response.toLowerCase.startsWith("y")) {
         play(word)
       }
       else is_game_needed = false
-      println(s" It is end of game, the secret word was $word ")
+      println(s" It is end of the game, the secret word was $word ")
     }
   }
   /**
@@ -137,24 +140,25 @@ object FinalAssignmentHangman extends App {
             if c == guess.head
           } yield c.toUpper
           val mee = word.indexOf(result) + 1
-          println(s" $result letter is number $mee in the word")
-          println(s"Correctly guessed letters $guessedCorrect") // letters are in the order of guess order, not like they are in the secret word
-
+          //          println(s" $result letter is number $mee in the word")
+          //          println(s"Correctly guessed letters $guessedCorrect") // letters are in the order of guess order, not like they are in the secret word
+          var setCorrectGuesses = guessedCorrect.toList
+          var listCorrectChars = setCorrectGuesses.map(_.head)
           for (c <- word) {
-            if (c == guess.head) println(s"$guess")
-            else println("_")
+            if (listCorrectChars.contains(c)) print (c)
+            else print("_")
           }
-
+          println()
           val ff = guessedCorrect.size
-          if (ff == word.length) {
-            println(s"You have guessed all the letters in the secret word $word,Congratulations!")
+          if (ff == charCountWord) {
+            println(s"You have guessed the secret word $word,Congratulations!")
             guessed = true
           }
         }
       }
       else if (guess.length == word.length) {
         if (guess == word) {
-          println(s"You have guessed the word $guess, congratulations")
+          println(s"You have guessed the word $guess, Congratulations!")
           guessed = true
         }
         else if (guess != word) {
